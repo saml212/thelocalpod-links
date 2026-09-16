@@ -98,8 +98,8 @@
   }
 
   @keyframes marquee {
-    0% { transform: translateX(100%); }
-    100% { transform: translateX(-100%); }
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
   }
 
   @keyframes pulse-glow {
@@ -150,9 +150,14 @@
     top: 0; left: 0; right: 0;
     z-index: 500;
   }
-  .marquee-bar span {
-    display: inline-block;
+  .marquee-track {
+    display: flex;
+    width: max-content;
     animation: marquee 180s linear infinite;
+    will-change: transform;
+  }
+  .marquee-track span {
+    flex: none;
   }
 
   /* Profile photo */
@@ -444,13 +449,20 @@
       animation-iteration-count: 1 !important;
       scroll-behavior: auto !important;
     }
+    .marquee-track {
+      animation: none !important;
+      transform: none !important;
+    }
+    .marquee-track span[aria-hidden="true"] { display: none; }
   }
 </style>
 </head>
 <body>
 
 <div class="marquee-bar">
-  <span id="marquee-text"></span>
+  <div class="marquee-track">
+    <span id="marquee-text"></span><span id="marquee-text-copy" aria-hidden="true"></span>
+  </div>
 </div>
 
 <div class="stars" id="stars"></div>
@@ -719,6 +731,7 @@ var ti = 0;
 
 // Marquee — THE MANIFESTO (one continuous scroll, Dr. Bronner's style)
 document.getElementById('marquee-text').textContent = manifesto;
+document.getElementById('marquee-text-copy').textContent = manifesto;
 
 // Dividers
 document.getElementById('divider-top').textContent = pick(dividers);
